@@ -942,6 +942,7 @@ class LoaderExtensionOutputGenerator(OutputGenerator):
                                'vkGetPhysicalDeviceSurfaceFormats2KHR',
                                'vkGetPhysicalDeviceSurfaceCapabilities2EXT',
                                'vkReleaseDisplayEXT',
+                               'vkAcquireWaylandDisplayEXT',
                                'vkAcquireXlibDisplayEXT',
                                'vkGetRandROutputDisplayEXT',
                                'vkGetPhysicalDeviceExternalBufferPropertiesKHR',

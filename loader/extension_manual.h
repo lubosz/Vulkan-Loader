@@ -50,6 +50,16 @@ VKAPI_ATTR VkResult VKAPI_CALL ReleaseDisplayEXT(VkPhysicalDevice physicalDevice
 
 VKAPI_ATTR VkResult VKAPI_CALL terminator_ReleaseDisplayEXT(VkPhysicalDevice physicalDevice, VkDisplayKHR display);
 
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+VKAPI_ATTR VkResult VKAPI_CALL AcquireWaylandDisplayEXT(VkPhysicalDevice physicalDevice, struct wl_display* display,
+                                                        struct zwp_drm_lease_manager_v1* manager, uint32_t pConnectorCount,
+                                                        VkWaylandLeaseConnectorEXT* pConnectors);
+
+VKAPI_ATTR VkResult VKAPI_CALL terminator_AcquireWaylandDisplayEXT(VkPhysicalDevice physicalDevice, struct wl_display* display,
+                                                                   struct zwp_drm_lease_manager_v1* manager, uint32_t pConnectorCount,
+                                                                   VkWaylandLeaseConnectorEXT* pConnectors);
+#endif // VK_USE_PLATFORM_WAYLAND_KHR
+
 #ifdef VK_USE_PLATFORM_XLIB_XRANDR_EXT
 VKAPI_ATTR VkResult VKAPI_CALL AcquireXlibDisplayEXT(VkPhysicalDevice physicalDevice, Display* dpy, VkDisplayKHR display);
 
