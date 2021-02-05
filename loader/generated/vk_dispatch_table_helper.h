@@ -942,6 +942,9 @@ static inline void layer_init_instance_dispatch_table(VkInstance instance, VkLay
     table->GetPhysicalDeviceSurfacePresentModes2EXT = (PFN_vkGetPhysicalDeviceSurfacePresentModes2EXT) gpa(instance, "vkGetPhysicalDeviceSurfacePresentModes2EXT");
 #endif // VK_USE_PLATFORM_WIN32_KHR
     table->CreateHeadlessSurfaceEXT = (PFN_vkCreateHeadlessSurfaceEXT) gpa(instance, "vkCreateHeadlessSurfaceEXT");
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+    table->AcquireWaylandDisplayEXT = (PFN_vkAcquireWaylandDisplayEXT) gpa(instance, "vkAcquireWaylandDisplayEXT");
+#endif // VK_USE_PLATFORM_WAYLAND_KHR
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     table->AcquireWinrtDisplayNV = (PFN_vkAcquireWinrtDisplayNV) gpa(instance, "vkAcquireWinrtDisplayNV");
 #endif // VK_USE_PLATFORM_WIN32_KHR

@@ -432,6 +432,11 @@ struct loader_icd_term_dispatch {
     // ---- VK_EXT_headless_surface extension commands
     PFN_vkCreateHeadlessSurfaceEXT CreateHeadlessSurfaceEXT;
 
+    // ---- VK_EXT_acquire_wl_display extension commands
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+    PFN_vkAcquireWaylandDisplayEXT AcquireWaylandDisplayEXT;
+#endif // VK_USE_PLATFORM_WAYLAND_KHR
+
     // ---- VK_NV_acquire_winrt_display extension commands
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     PFN_vkAcquireWinrtDisplayNV AcquireWinrtDisplayNV;
@@ -463,6 +468,7 @@ union loader_instance_extension_enables {
         uint8_t ext_acquire_xlib_display : 1;
         uint8_t ext_display_surface_counter : 1;
         uint8_t ext_debug_utils : 1;
+        uint8_t ext_acquire_wl_display : 1;
     };
     uint64_t padding[4];
 };

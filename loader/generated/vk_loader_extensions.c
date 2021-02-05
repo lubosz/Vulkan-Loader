@@ -284,6 +284,11 @@ VKAPI_ATTR bool VKAPI_CALL loader_icd_init_entries(struct loader_icd_term *icd_t
     // ---- VK_EXT_headless_surface extension commands
     LOOKUP_GIPA(CreateHeadlessSurfaceEXT, false);
 
+    // ---- VK_EXT_acquire_wl_display extension commands
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+    LOOKUP_GIPA(AcquireWaylandDisplayEXT, false);
+#endif // VK_USE_PLATFORM_WAYLAND_KHR
+
     // ---- VK_NV_acquire_winrt_display extension commands
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     LOOKUP_GIPA(AcquireWinrtDisplayNV, false);
@@ -1035,6 +1040,11 @@ VKAPI_ATTR void VKAPI_CALL loader_init_instance_extension_dispatch_table(VkLayer
     // ---- VK_EXT_headless_surface extension commands
     table->CreateHeadlessSurfaceEXT = (PFN_vkCreateHeadlessSurfaceEXT)gpa(inst, "vkCreateHeadlessSurfaceEXT");
 
+    // ---- VK_EXT_acquire_wl_display extension commands
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+    table->AcquireWaylandDisplayEXT = (PFN_vkAcquireWaylandDisplayEXT)gpa(inst, "vkAcquireWaylandDisplayEXT");
+#endif // VK_USE_PLATFORM_WAYLAND_KHR
+
     // ---- VK_NV_acquire_winrt_display extension commands
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     table->AcquireWinrtDisplayNV = (PFN_vkAcquireWinrtDisplayNV)gpa(inst, "vkAcquireWinrtDisplayNV");
@@ -1776,6 +1786,11 @@ VKAPI_ATTR void* VKAPI_CALL loader_lookup_instance_dispatch_table(const VkLayerI
 
     // ---- VK_EXT_headless_surface extension commands
     if (!strcmp(name, "CreateHeadlessSurfaceEXT")) return (void *)table->CreateHeadlessSurfaceEXT;
+
+    // ---- VK_EXT_acquire_wl_display extension commands
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+    if (!strcmp(name, "AcquireWaylandDisplayEXT")) return (void *)table->AcquireWaylandDisplayEXT;
+#endif // VK_USE_PLATFORM_WAYLAND_KHR
 
     // ---- VK_NV_acquire_winrt_display extension commands
 #ifdef VK_USE_PLATFORM_WIN32_KHR
@@ -5043,6 +5058,16 @@ bool extension_instance_gpa(struct loader_instance *ptr_instance, const char *na
         return true;
     }
 
+    // ---- VK_EXT_acquire_wl_display extension commands
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+    if (!strcmp("vkAcquireWaylandDisplayEXT", name)) {
+        *addr = (ptr_instance->enabled_known_extensions.ext_acquire_wl_display == 1)
+                     ? (void *)AcquireWaylandDisplayEXT
+                     : NULL;
+        return true;
+    }
+#endif // VK_USE_PLATFORM_WAYLAND_KHR
+
     // ---- VK_EXT_private_data extension commands
     if (!strcmp("vkCreatePrivateDataSlotEXT", name)) {
         *addr = (void *)CreatePrivateDataSlotEXT;
@@ -5226,6 +5251,12 @@ void extensions_create_instance(struct loader_instance *ptr_instance, const VkIn
     // ---- VK_EXT_debug_utils extension commands
         } else if (0 == strcmp(pCreateInfo->ppEnabledExtensionNames[i], VK_EXT_DEBUG_UTILS_EXTENSION_NAME)) {
             ptr_instance->enabled_known_extensions.ext_debug_utils = 1;
+
+    // ---- VK_EXT_acquire_wl_display extension commands
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+        } else if (0 == strcmp(pCreateInfo->ppEnabledExtensionNames[i], VK_EXT_ACQUIRE_WL_DISPLAY_EXTENSION_NAME)) {
+            ptr_instance->enabled_known_extensions.ext_acquire_wl_display = 1;
+#endif // VK_USE_PLATFORM_WAYLAND_KHR
         }
     }
 }
@@ -5499,6 +5530,11 @@ const VkLayerInstanceDispatchTable instance_disp = {
     // ---- VK_EXT_headless_surface extension commands
     .CreateHeadlessSurfaceEXT = terminator_CreateHeadlessSurfaceEXT,
 
+    // ---- VK_EXT_acquire_wl_display extension commands
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+    .AcquireWaylandDisplayEXT = terminator_AcquireWaylandDisplayEXT,
+#endif // VK_USE_PLATFORM_WAYLAND_KHR
+
     // ---- VK_NV_acquire_winrt_display extension commands
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     .AcquireWinrtDisplayNV = terminator_AcquireWinrtDisplayNV,
@@ -5573,6 +5609,9 @@ const char *const LOADER_INSTANCE_EXTENSIONS[] = {
 #endif // VK_USE_PLATFORM_METAL_EXT
                                                   VK_EXT_VALIDATION_FEATURES_EXTENSION_NAME,
                                                   VK_EXT_HEADLESS_SURFACE_EXTENSION_NAME,
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+                                                  VK_EXT_ACQUIRE_WL_DISPLAY_EXTENSION_NAME,
+#endif // VK_USE_PLATFORM_WAYLAND_KHR
 #ifdef VK_USE_PLATFORM_DIRECTFB_EXT
                                                   VK_EXT_DIRECTFB_SURFACE_EXTENSION_NAME,
 #endif // VK_USE_PLATFORM_DIRECTFB_EXT
