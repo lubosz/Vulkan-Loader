@@ -173,23 +173,23 @@ VKAPI_ATTR VkResult VKAPI_CALL terminator_ReleaseDisplayEXT(VkPhysicalDevice phy
 
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
 VKAPI_ATTR VkResult VKAPI_CALL AcquireWaylandDisplayEXT(VkPhysicalDevice physicalDevice, struct wl_display* display,
-                                                        struct zwp_drm_lease_manager_v1* manager, uint32_t pConnectorCount,
+                                                        struct zwp_drm_lease_device_v1* leaseDevice, uint32_t pConnectorCount,
                                                         VkWaylandLeaseConnectorEXT* pConnectors) {
     const VkLayerInstanceDispatchTable *disp;
     VkPhysicalDevice unwrapped_phys_dev = loader_unwrap_physical_device(physicalDevice);
     disp = loader_get_instance_layer_dispatch(physicalDevice);
-    return disp->AcquireWaylandDisplayEXT(unwrapped_phys_dev, display, manager, pConnectorCount, pConnectors);
+    return disp->AcquireWaylandDisplayEXT(unwrapped_phys_dev, display, leaseDevice, pConnectorCount, pConnectors);
 }
 
 VKAPI_ATTR VkResult VKAPI_CALL terminator_AcquireWaylandDisplayEXT(VkPhysicalDevice physicalDevice, struct wl_display* display,
-                                                                   struct zwp_drm_lease_manager_v1* manager, uint32_t pConnectorCount,
+                                                                   struct zwp_drm_lease_device_v1* leaseDevice, uint32_t pConnectorCount,
                                                                    VkWaylandLeaseConnectorEXT* pConnectors) {
     struct loader_physical_device_term *phys_dev_term = (struct loader_physical_device_term *)physicalDevice;
     struct loader_icd_term *icd_term = phys_dev_term->this_icd_term;
 
     if (icd_term->dispatch.AcquireWaylandDisplayEXT != NULL) {
         // Pass the call to the driver
-        return icd_term->dispatch.AcquireWaylandDisplayEXT(phys_dev_term->phys_dev, display, manager, pConnectorCount, pConnectors);
+        return icd_term->dispatch.AcquireWaylandDisplayEXT(phys_dev_term->phys_dev, display, leaseDevice, pConnectorCount, pConnectors);
     } else {
         // Emulate the call
         loader_log(icd_term->this_instance, VK_DEBUG_REPORT_INFORMATION_BIT_EXT, 0,

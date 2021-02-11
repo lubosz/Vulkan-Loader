@@ -52,11 +52,11 @@ VKAPI_ATTR VkResult VKAPI_CALL terminator_ReleaseDisplayEXT(VkPhysicalDevice phy
 
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
 VKAPI_ATTR VkResult VKAPI_CALL AcquireWaylandDisplayEXT(VkPhysicalDevice physicalDevice, struct wl_display* display,
-                                                        struct zwp_drm_lease_manager_v1* manager, uint32_t pConnectorCount,
+                                                        struct zwp_drm_lease_device_v1* leaseDevice, uint32_t pConnectorCount,
                                                         VkWaylandLeaseConnectorEXT* pConnectors);
 
 VKAPI_ATTR VkResult VKAPI_CALL terminator_AcquireWaylandDisplayEXT(VkPhysicalDevice physicalDevice, struct wl_display* display,
-                                                                   struct zwp_drm_lease_manager_v1* manager, uint32_t pConnectorCount,
+                                                                   struct zwp_drm_lease_device_v1* leaseDevice, uint32_t pConnectorCount,
                                                                    VkWaylandLeaseConnectorEXT* pConnectors);
 #endif // VK_USE_PLATFORM_WAYLAND_KHR
 
